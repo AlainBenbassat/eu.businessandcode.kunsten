@@ -3,9 +3,14 @@
     "name": "contact_profile",
     "title": "Contact Profile",
     "option_values": {
-      "": {
+      "profile_page_link": {
         "name": "profile_page_link",
         "label": "Profile page link",
+        "is_active": 1
+      },
+      "email_from": {
+        "name": "email_from",
+        "label": "Email from",
         "is_active": 1
       }
     }

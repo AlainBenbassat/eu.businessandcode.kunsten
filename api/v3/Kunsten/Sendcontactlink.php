@@ -30,15 +30,31 @@ function civicrm_api3_kunsten_Sendcontactlink($params) {
       $c = civicrm_api3('Contact', 'create', $p);
     }
 
+    $kunstenConfig = CRM_Kunsten_Config::singleton();
+    $url = $kunstenConfig->getProfilePageLink();
+
     if ($c['count'] == 1) {
-      $kunstenConfig = CRM_Kunsten_Config::singleton();
-      $url = $kunstenConfig->getProfilePageLink();
 
-      /*
-       * TODO: send mail
-       */
+      list($mailSent, $subject, $message, $html) = CRM_Core_BAO_MessageTemplate::sendTemplate(
+        array(
+          'groupName' => 'msg_tpl_workflow_event',
+          'valueName' => 'participant_' . strtolower($mailType),
+          'contactId' => $c['values'][0]->id,
+          'tplParams' => array(
+            'checksumValue' => 'IS DIT NODIG?',
+          ),
+          'from' => $receiptFrom,
+          'toName' => $participantName,
+          'toEmail' => $toEmail,
+        )
+      );
 
-      $returnArr = 'OK';
+      if ($mailSent) {
+        $returnArr = 'OK';
+      }
+      else {
+        throw new Exception('Sendmail returned an error');
+      }
     }
   }
   catch (Exception $e) {

@@ -5,6 +5,7 @@ class CRM_Kunsten_Config {
   private static $singleton;
 
   private $_profilePageLink;
+  private $_emailFrom;
 
   private function __construct() {
     try {
