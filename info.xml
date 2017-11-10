@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<extension key="eu.businessandcode.kunsten" type="module">
+  <file>kunsten</file>
+  <name>eu.businessandcode.kunsten</name>
+  <description>Custom stuff for Kunstenpunt</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>Alain Benbassat</author>
+    <email>alain@businessandcode.eu</email>
+  </maintainer>
+  <urls>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+  </urls>
+  <releaseDate>2017-11-10</releaseDate>
+  <version>1.0</version>
+  <develStage>stable</develStage>
+  <compatibility>
+    <ver>4.7</ver>
+  </compatibility>
+  <comments>o.a. profile page</comments>
+  <civix>
+    <namespace>CRM/Kunsten</namespace>
+  </civix>
+</extension>

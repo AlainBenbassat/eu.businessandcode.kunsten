@@ -1,0 +1,13 @@
+{
+  "contact_profile": {
+    "name": "contact_profile",
+    "title": "Contact Profile",
+    "option_values": {
+      "": {
+        "name": "profile_page_link",
+        "label": "Profile page link",
+        "is_active": 1
+      }
+    }
+  }
+}
