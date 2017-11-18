@@ -15,51 +15,62 @@ function civicrm_api3_kunsten_Sendcontactlink($params) {
       throw new Exception('email is required');
     }
 
-    // lookup get the contact info
+    // get the configuration
+    $kunstenConfig = CRM_Kunsten_Config::singleton();
+
+    // lookup get the contact, based on the email address
     $p = array(
       'email' => $params['email'],
       'sequential' => 1,
+      'contact_type' => 'Individual',
       'is_deleted' => 0,
       'is_deceased' => 0,
     );
     $c = civicrm_api3('Contact', 'get', $p);
 
-    if ($c['count'] == 0) {
-      // no contact with this email address: create it
-      $p['contact_type'] = 'Individual';
-      $c = civicrm_api3('Contact', 'create', $p);
+    if ($c['count'] > 1) {
+      // multiple contacts with that email address, return an error
+      throw new Exception('Multiple contacts with that email address');
     }
 
-    $kunstenConfig = CRM_Kunsten_Config::singleton();
-    $url = $kunstenConfig->getProfilePageLink();
+    if ($c['count'] == 0) {
+      // no contact with this email address: create it
+      $c = civicrm_api3('Contact', 'create', $p);
 
-    if ($c['count'] == 1) {
+      // get the welcome message template ID
+      $templateID = $kunstenConfig->getWelcomeMessageTemplateID();
+    }
+    else {
+      // get the update message template ID
+      $templateID = $kunstenConfig->getUpdateMessageTemplateID();
+    }
 
-      list($mailSent, $subject, $message, $html) = CRM_Core_BAO_MessageTemplate::sendTemplate(
-        array(
-          'groupName' => 'msg_tpl_workflow_event',
-          'valueName' => 'participant_' . strtolower($mailType),
-          'contactId' => $c['values'][0]->id,
-          'tplParams' => array(
-            'checksumValue' => 'IS DIT NODIG?',
-          ),
-          'from' => $receiptFrom,
-          'toName' => $participantName,
-          'toEmail' => $toEmail,
-        )
-      );
+    // make sure the template id is filled in
+    if ($templateID == 0) {
+      throw new Exception('Template id for update and welcome message should be configured');
+    }
 
-      if ($mailSent) {
-        $returnArr = 'OK';
-      }
-      else {
-        throw new Exception('Sendmail returned an error');
-      }
+    // check the email params
+    if ($kunstenConfig->getFromName() == 'FIXME') {
+      throw new Exception('Email settings should be configured');
+    }
+
+    // send the mail
+    $p = array(
+      'contact_id' => $c['values'][0]['id'],
+      'template_id' => $templateID,
+      'from_name' => $kunstenConfig->getFromName(),
+      'from_email' => $kunstenConfig->getFromEmail(),
+    );
+    $ret = civicrm_api3('Email', 'send', $p);
+
+    if ($ret['is_error'] == 1) {
+      throw new Exception('Send mail returned an error');
     }
   }
   catch (Exception $e) {
     throw new API_Exception('Could not retrieve contact: ' . $e->getMessage(), 999);
   }
 
-  return civicrm_api3_create_success($returnArr, $params);
+  return civicrm_api3_create_success('Message sent', $params);
 }

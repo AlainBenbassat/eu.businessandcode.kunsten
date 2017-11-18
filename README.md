@@ -1,3 +1,6 @@
+Required modules:
+- org.civicoop.emailapi
+- org.civicoop.configitems
 
 Actions:
   getContactInfo

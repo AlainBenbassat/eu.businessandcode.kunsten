@@ -1,0 +1,38 @@
+{
+  "kunstenpunt_communicatie": {
+    "name": "kunstenpunt_communicatie",
+    "title": "Kunstenpunt communicatie",
+    "extends": "Individual",
+    "style": "Inline",
+    "is_active": 1,
+    "is_reserved": 0,
+    "collapse_display": 0,
+    "table_name": "civicrm_value_kunstenpunt_communicatie",
+    "fields": {
+      "kunstenpunt_nieuws": {
+        "name": "kunstenpunt_nieuws",
+        "label": "Kunstenpunt Nieuws",
+        "option_group": "kunstenpunt_nieuws",
+        "data_type": "String",
+        "html_type": "CheckBox",
+        "is_searchable": 1,
+        "is_view": 0,
+        "column_name": "kunstenpunt_nieuws",
+        "weight": 1,
+        "is_active": 1
+      },
+      "flanders_ai_news": {
+        "name": "flanders_art_institute_news",
+        "label": "Flanders Art Institute News",
+        "option_group": "flanders_ai_news",
+        "data_type": "String",
+        "html_type": "CheckBox",
+        "is_searchable": 1,
+        "is_view": 0,
+        "column_name": "flanders_art_institute_news",
+        "weight": 2,
+        "is_active": 1
+      }
+    }
+  }
+}

@@ -6,11 +6,83 @@
       "profile_page_link": {
         "name": "profile_page_link",
         "label": "Profile page link",
+        "value": "http://FIXME",
+        "weight": 1,
         "is_active": 1
       },
-      "email_from": {
-        "name": "email_from",
-        "label": "Email from",
+      "from_name": {
+        "name": "from_name",
+        "label": "From Name",
+        "value": "FIXME",
+        "weight": 2,
+        "is_active": 1
+      },
+      "from_email": {
+        "name": "from_email",
+        "label": "From Email",
+        "value": "FIXME",
+        "weight": 3,
+        "is_active": 1
+      },
+      "welcome_message_template_id": {
+        "name": "welcome_message_template_id",
+        "label": "Welcome Message Template ID",
+        "value": 0,
+        "weight": 4,
+        "is_active": 1
+      },
+      "update_message_template_id": {
+        "name": "update_message_template_id",
+        "label": "Update Message Template ID",
+        "value": 0,
+        "weight": 5,
+        "is_active": 1
+      }
+    }
+  },
+  "kunstenpunt_nieuws": {
+    "name": "kunstenpunt_nieuws",
+    "title": "Kunstenpunt nieuws",
+    "option_values": {
+      "beeldende_kunsten": {
+        "name": "beeldende_kunsten",
+        "label": "Beeldende kunsten",
+        "is_active": 1
+      },
+      "muziek": {
+        "name": "muziek",
+        "label": "Muziek",
+        "is_active": 1
+      },
+      "podiumkunsten": {
+        "name": "podiumkunsten",
+        "label": "Podiumkunsten",
+        "is_active": 1
+      },
+      "highlights": {
+        "name": "highlights",
+        "label": "Highlights",
+        "is_active": 1
+      }
+    }
+  },
+  "flanders_ai_news": {
+    "name": "flanders_ai_news",
+    "title": "Flanders Arts Institute News",
+    "option_values": {
+      "visual_arts": {
+        "name": "visual_arts",
+        "label": "Visual Arts",
+        "is_active": 1
+      },
+      "music": {
+        "name": "music",
+        "label": "Music",
+        "is_active": 1
+      },
+      "performing_arts": {
+        "name": "performing_arts",
+        "label": "Performing Arts",
         "is_active": 1
       }
     }

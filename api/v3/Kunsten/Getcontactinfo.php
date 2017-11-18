@@ -39,7 +39,7 @@ function civicrm_api3_kunsten_Getcontactinfo($params) {
     $returnArr['first_name'] = $c['first_name'];
     $returnArr['last_name'] = $c['last_name'];
     $returnArr['current_employer'] = $c['current_employer'];
-
+    $returnArr['email'] = $c['email'];
   }
   catch (Exception $e) {
     throw new API_Exception('Could not retrieve contact: ' . $e->getMessage(), 999);

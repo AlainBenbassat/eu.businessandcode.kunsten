@@ -6,12 +6,14 @@ use CRM_Kunsten_ExtensionUtil as E;
 
 function kunsten_civicrm_tokens(&$tokens) {
   $tokens['contact'] = array(
-    'contact.contactlink' => 'Link naar de pagina op kunsten.be waar het contact zijn gegevens kan aanpassen.',
+    'contact.profilepagelink' => 'Link naar de pagina waar het contact zijn gegevens kan aanpassen.',
   );
 }
 
 function kunsten_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null) {
-  if (array_key_exists('contact', $tokens) && array_key_exists('contactlink', $tokens['contact'])) {
+  if (array_key_exists('contact', $tokens) && in_array('profilepagelink', $tokens['contact'])) {
+    $config = CRM_Kunsten_Config::singleton();
+
     foreach ($cids as $cid) {
       $sql = "
         SELECT
@@ -28,7 +30,8 @@ function kunsten_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = arr
       $dao = CRM_Core_DAO::executeQuery($sql, $sqlParams);
       $dao->fetch();
 
-      $values[$cid]['contact.contactlink'] = "{$dao->nick_name}";
+      $url = $config->getProfilePageLink() . "?a={$dao->id}&b={$dao->hash}";
+      $values[$cid]['contact.profilepagelink'] = $url;
     }
   }
 }
