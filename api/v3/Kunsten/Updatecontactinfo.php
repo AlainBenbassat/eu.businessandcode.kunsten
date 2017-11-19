@@ -2,24 +2,37 @@
 use CRM_Kunsten_ExtensionUtil as E;
 
 function _civicrm_api3_kunsten_Updatecontactinfo_spec(&$spec) {
-  $spec['magicword']['api.required'] = 1;
 }
 
 function civicrm_api3_kunsten_Updatecontactinfo($params) {
-  if (array_key_exists('magicword', $params) && $params['magicword'] == 'sesame') {
-    $returnValues = array(
-      // OK, return several data rows
-      12 => array('id' => 12, 'name' => 'Twelve'),
-      34 => array('id' => 34, 'name' => 'Thirty four'),
-      56 => array('id' => 56, 'name' => 'Fifty six'),
+  // make sure the combination id/hash is correct
+  try {
+    $p = array(
+      'id' => $params['id'],
+      'hash' => $params['hash'],
     );
-    // ALTERNATIVE: $returnValues = array(); // OK, success
-    // ALTERNATIVE: $returnValues = array("Some value"); // OK, return a single value
+    $c = civicrm_api3('Contact', 'getsingle', $p);
+  }
+  catch (Exception $e) {
+    throw new API_Exception('Could not retrieve contact', 999);
+  }
 
-    // Spec: civicrm_api3_create_success($values = 1, $params = array(), $entity = NULL, $action = NULL)
-    return civicrm_api3_create_success($returnValues, $params, 'NewEntity', 'NewAction');
+  // get the configuration
+  $config = CRM_Kunsten_Config::singleton();
+
+  try {
+    $p = array(
+      'id' => $params['id'],
+      'first_name' => $params['first_name'],
+      'last_name' => $params['last_name'],
+      $config->getCustomFieldColumn('kunstenpunt_nieuws') => $params['kunstenpunt_nieuws'],
+      $config->getCustomFieldColumn('flanders_art_institute_news') => $params['flanders_art_institute_news'],
+    );
+    $c = civicrm_api3('Contact', 'create', $p);
   }
-  else {
-    throw new API_Exception(/*errorMessage*/ 'Everyone knows that the magicword is "sesame"', /*errorCode*/ 1234);
+  catch (Exception $e) {
+    throw new API_Exception('Could not save contact: ' . $e->getMessage(), 999);
   }
+
+  return civicrm_api3_create_success('OK', $params);
 }

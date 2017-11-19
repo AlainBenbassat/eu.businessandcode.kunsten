@@ -25,21 +25,38 @@ function civicrm_api3_kunsten_Getcontactinfo($params) {
       throw new Exception('hash is required');
     }
 
+    // get the configuration
+    $config = CRM_Kunsten_Config::singleton();
+
     // get the contact info
     $p = array(
       'id' => $params['id'],
       'hash' => $params['hash'],
       'is_deleted' => 0,
       'is_deceased' => 0,
+      'return' => array(
+        'gender_id',
+        'first_name',
+        'last_name',
+        'current_employer',
+        'email',
+        $config->getCustomFieldColumn('kunstenpunt_nieuws'),
+        $config->getCustomFieldColumn('flanders_art_institute_news')
+      ),
     );
     $c = civicrm_api3('Contact', 'getsingle', $p);
 
+    // return only these fields
     $returnArr = array();
+    $returnArr['id'] = $c['id'];
+    $returnArr['hash'] = $c['hash'];
     $returnArr['gender_id'] = $c['gender_id'];
     $returnArr['first_name'] = $c['first_name'];
     $returnArr['last_name'] = $c['last_name'];
     $returnArr['current_employer'] = $c['current_employer'];
     $returnArr['email'] = $c['email'];
+    $returnArr['kunstenpunt_nieuws'] = $c[$config->getCustomFieldColumn('kunstenpunt_nieuws')];
+    $returnArr['flanders_art_institute_news'] = $c[$config->getCustomFieldColumn('flanders_art_institute_news')];
   }
   catch (Exception $e) {
     throw new API_Exception('Could not retrieve contact: ' . $e->getMessage(), 999);

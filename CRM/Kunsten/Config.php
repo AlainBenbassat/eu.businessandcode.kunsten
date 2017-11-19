@@ -9,6 +9,7 @@ class CRM_Kunsten_Config {
   private $_updateMessageTemplateID;
   private $_fromEmail;
   private $_fromName;
+  private $_customFields;
 
   private function __construct() {
     try {
@@ -41,6 +42,16 @@ class CRM_Kunsten_Config {
         'name' => 'update_message_template_id',
         'option_group_id' => 'contact_profile',
       ));
+
+      // get custom field id's
+      $result = civicrm_api3('CustomField', 'get', array(
+        'sequential' => 1,
+        'custom_group_id' => "kunstenpunt_communicatie",
+      ));
+      $this->_customFields = array();
+      foreach ($result['values'] as $field) {
+        $this->_customFields[$field['name']] = 'custom_' . $field['id'];
+      }
     }
     catch (Exception $e) {
       throw new Exception('Could not retrieve the option value: profile page link');
@@ -49,7 +60,7 @@ class CRM_Kunsten_Config {
 
   public static function singleton() {
     if (!self::$singleton) {
-      self:: $singleton = new CRM_Kunsten_Config();
+      self::$singleton = new CRM_Kunsten_Config();
     }
     return self::$singleton;
   }
@@ -69,7 +80,12 @@ class CRM_Kunsten_Config {
   public function getFromEmail() {
     return $this->_fromEmail;
   }
+
   public function getFromName() {
     return $this->_fromName;
+  }
+
+  public function getCustomFieldColumn($name) {
+    return $this->_customFields[$name];
   }
 }
