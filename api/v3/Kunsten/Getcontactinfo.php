@@ -41,7 +41,8 @@ function civicrm_api3_kunsten_Getcontactinfo($params) {
         'current_employer',
         'email',
         $config->getCustomFieldColumn('kunstenpunt_nieuws'),
-        $config->getCustomFieldColumn('flanders_art_institute_news')
+        $config->getCustomFieldColumn('flanders_arts_institute_news'),
+        $config->getCustomFieldColumn('initiatieven_themas'),
       ),
     );
     $c = civicrm_api3('Contact', 'getsingle', $p);
@@ -56,7 +57,8 @@ function civicrm_api3_kunsten_Getcontactinfo($params) {
     $returnArr['current_employer'] = $c['current_employer'];
     $returnArr['email'] = $c['email'];
     $returnArr['kunstenpunt_nieuws'] = $c[$config->getCustomFieldColumn('kunstenpunt_nieuws')];
-    $returnArr['flanders_art_institute_news'] = $c[$config->getCustomFieldColumn('flanders_art_institute_news')];
+    $returnArr['flanders_arts_institute_news'] = $c[$config->getCustomFieldColumn('flanders_arts_institute_news')];
+    $returnArr['initiatieven_themas'] = $c[$config->getCustomFieldColumn('initiatieven_themas')];
   }
   catch (Exception $e) {
     throw new API_Exception('Could not retrieve contact: ' . $e->getMessage(), 999);

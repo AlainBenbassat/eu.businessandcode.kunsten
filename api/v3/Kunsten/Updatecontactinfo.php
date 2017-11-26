@@ -26,7 +26,8 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
       'first_name' => $params['first_name'],
       'last_name' => $params['last_name'],
       $config->getCustomFieldColumn('kunstenpunt_nieuws') => $params['kunstenpunt_nieuws'],
-      $config->getCustomFieldColumn('flanders_art_institute_news') => $params['flanders_art_institute_news'],
+      $config->getCustomFieldColumn('flanders_arts_institute_news') => $params['flanders_arts_institute_news'],
+      $config->getCustomFieldColumn('initiatieven_themas') => $params['initiatieven_themas'],
     );
     $c = civicrm_api3('Contact', 'create', $p);
   }
