@@ -22,15 +22,27 @@
         "is_active": 1
       },
       "flanders_ai_news": {
-        "name": "flanders_art_institute_news",
-        "label": "Flanders Art Institute News",
+        "name": "flanders_arts_institute_news",
+        "label": "Flanders Arts Institute News",
         "option_group": "flanders_ai_news",
         "data_type": "String",
         "html_type": "CheckBox",
         "is_searchable": 1,
         "is_view": 0,
-        "column_name": "flanders_art_institute_news",
+        "column_name": "flanders_arts_institute_news",
         "weight": 2,
+        "is_active": 1
+      },
+      "initiatieven_themas": {
+        "name": "initiatieven_themas",
+        "label": "Kunstenpunt Initiatieven en Thema's",
+        "option_group": "initiatieven_themas",
+        "data_type": "String",
+        "html_type": "CheckBox",
+        "is_searchable": 1,
+        "is_view": 0,
+        "column_name": "initiatieven_themas",
+        "weight": 3,
         "is_active": 1
       }
     }

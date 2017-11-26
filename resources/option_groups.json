@@ -86,5 +86,21 @@
         "is_active": 1
       }
     }
+  },
+  "initiatieven_themas": {
+    "name": "initiatieven_themas",
+    "title": "Kunstenpunt Initiatieven en Thema's",
+    "option_values": {
+      "internationalisering": {
+        "name": "internationalisering",
+        "label": "Internationalisering van de kunsten",
+        "is_active": 1
+      },
+      "stedelijkheid": {
+        "name": "stedelijkheid",
+        "label": "Stedelijkheid",
+        "is_active": 1
+      }
+    }
   }
 }
