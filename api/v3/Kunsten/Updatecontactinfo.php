@@ -25,11 +25,32 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
       'id' => $params['id'],
       'first_name' => $params['first_name'],
       'last_name' => $params['last_name'],
-      $config->getCustomFieldColumn('kunstenpunt_nieuws') => $params['kunstenpunt_nieuws'],
-      $config->getCustomFieldColumn('flanders_arts_institute_news') => $params['flanders_arts_institute_news'],
-      $config->getCustomFieldColumn('initiatieven_themas') => $params['initiatieven_themas'],
     );
+
+    if (array_key_exists('kunstenpunt_nieuws', $params)) {
+      $p[$config->getCustomFieldColumn('kunstenpunt_nieuws')] = $params['kunstenpunt_nieuws'];
+    }
+
+    if (array_key_exists('flanders_arts_institute_news', $params)) {
+      $p[$config->getCustomFieldColumn('flanders_arts_institute_news')] = $params['flanders_arts_institute_news'];
+    }
+
+    if (array_key_exists('initiatieven_themas', $params)) {
+      $p[$config->getCustomFieldColumn('initiatieven_themas')] = $params['initiatieven_themas'];
+    }
     $c = civicrm_api3('Contact', 'create', $p);
+
+    // check the current employer
+    if ($c['current_employer'] != $params['current_employer']) {
+      // create an activity
+      $p = array(
+        'activity_type_id' => $config->getChangedDataActivityTypeID(),
+        'subject' => 'organisatie gewijzigd',
+        'status_id' => 1,
+        'priority_id' => 2,
+      );
+      $c = civicrm_api3('Activity', 'create', $p);
+    }
   }
   catch (Exception $e) {
     throw new API_Exception('Could not save contact: ' . $e->getMessage(), 999);

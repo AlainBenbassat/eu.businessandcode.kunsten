@@ -10,6 +10,7 @@ class CRM_Kunsten_Config {
   private $_fromEmail;
   private $_fromName;
   private $_customFields;
+  private $_changedDataActivityTypeID;
 
   private function __construct() {
     try {
@@ -41,6 +42,12 @@ class CRM_Kunsten_Config {
         'return' => 'value',
         'name' => 'update_message_template_id',
         'option_group_id' => 'contact_profile',
+      ));
+
+      $this->_changedDataActivityTypeID = civicrm_api3('OptionValue', 'getvalue', array(
+        'return' => 'value',
+        'name' => 'Online gegevensaanpassing',
+        'option_group_id' => 'activity_type',
       ));
 
       // get custom field id's
@@ -87,5 +94,9 @@ class CRM_Kunsten_Config {
 
   public function getCustomFieldColumn($name) {
     return $this->_customFields[$name];
+  }
+
+  public function getChangedDataActivityTypeID() {
+    return $this->_changedDataActivityTypeID;
   }
 }
