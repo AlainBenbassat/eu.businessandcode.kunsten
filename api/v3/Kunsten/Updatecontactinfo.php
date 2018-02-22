@@ -36,12 +36,12 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
     if (array_key_exists('initiatieven_themas', $params)) {
       $p[$config->getCustomFieldColumn('initiatieven_themas')] = $params['initiatieven_themas'];
     }
-    $c = civicrm_api3('Contact', 'create', $p);
+    civicrm_api3('Contact', 'create', $p);
 
     // check the current employer
     if ($c['current_employer'] != $params['current_employer']) {
       $details = '<p>oude waarde: ' . $c['current_employer'] .
-        'nieuwe waarde: ' . $params['current_employer'];
+        '<br>nieuwe waarde: ' . $params['current_employer'];
 
       // create an activity
       $p = array(
@@ -61,7 +61,7 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
     // check the first name
     if ($c['first_name'] != $params['first_name']) {
       $details = '<p>oude waarde: ' . $c['first_name'] .
-        'nieuwe waarde: ' . $params['first_name'];
+        '<br>nieuwe waarde: ' . $params['first_name'];
 
       // create an activity
       $p = array(
@@ -81,7 +81,7 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
     // check the last name
     if ($c['last_name'] != $params['last_name']) {
       $details = '<p>oude waarde: ' . $c['last_name'] .
-        'nieuwe waarde: ' . $params['last_name'];
+        '<br>nieuwe waarde: ' . $params['last_name'];
 
       // create an activity
       $p = array(
