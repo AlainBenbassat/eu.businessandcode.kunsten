@@ -42,12 +42,48 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
 
     // check the current employer
     if ($c['current_employer'] != $params['current_employer']) {
+      $details = '<p>oude waarde: ' . $c['current_employer'] .
+        'nieuwe waarde: ' . $params['current_employer'];
+
       // create an activity
       $p = array(
         'activity_type_id' => $config->getChangedDataActivityTypeID(),
         'subject' => 'organisatie gewijzigd',
         'status_id' => 1,
         'priority_id' => 2,
+        'details' => $details,
+      );
+      $c = civicrm_api3('Activity', 'create', $p);
+    }
+
+    // check the first name
+    if ($c['first_name'] != $params['first_name']) {
+      $details = '<p>oude waarde: ' . $c['first_name'] .
+        'nieuwe waarde: ' . $params['first_name'];
+
+      // create an activity
+      $p = array(
+        'activity_type_id' => $config->getChangedDataActivityTypeID(),
+        'subject' => 'voornaam gewijzigd',
+        'status_id' => 1,
+        'priority_id' => 2,
+        'details' => $details,
+      );
+      $c = civicrm_api3('Activity', 'create', $p);
+    }
+
+    // check the last name
+    if ($c['last_name'] != $params['last_name']) {
+      $details = '<p>oude waarde: ' . $c['last_name'] .
+        'nieuwe waarde: ' . $params['last_name'];
+
+      // create an activity
+      $p = array(
+        'activity_type_id' => $config->getChangedDataActivityTypeID(),
+        'subject' => 'Achternaam gewijzigd',
+        'status_id' => 1,
+        'priority_id' => 2,
+        'details' => $details,
       );
       $c = civicrm_api3('Activity', 'create', $p);
     }
