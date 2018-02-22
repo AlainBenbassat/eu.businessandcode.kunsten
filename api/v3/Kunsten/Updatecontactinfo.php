@@ -47,12 +47,15 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
       $p = array(
         'activity_type_id' => $config->getChangedDataActivityTypeID(),
         'subject' => 'organisatie gewijzigd',
+        'activity_date_time' => date('YmdHis'),
+        'is_test' => 0,
         'status_id' => 1,
         'priority_id' => 2,
         'details' => $details,
-        'contact_id' => $c['id'],
+        'source_contact_id' => $c['id'],
+        'target_contact_id' => $c['id'],
       );
-      $a = civicrm_api3('Activity', 'create', $p);
+      CRM_Activity_BAO_Activity::create($p);
     }
 
     // check the first name
@@ -64,12 +67,15 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
       $p = array(
         'activity_type_id' => $config->getChangedDataActivityTypeID(),
         'subject' => 'voornaam gewijzigd',
+        'activity_date_time' => date('YmdHis'),
+        'is_test' => 0,
         'status_id' => 1,
         'priority_id' => 2,
         'details' => $details,
-        'contact_id' => $c['id'],
+        'source_contact_id' => $c['id'],
+        'target_contact_id' => $c['id'],
       );
-      $a = civicrm_api3('Activity', 'create', $p);
+      CRM_Activity_BAO_Activity::create($p);
     }
 
     // check the last name
@@ -81,12 +87,15 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
       $p = array(
         'activity_type_id' => $config->getChangedDataActivityTypeID(),
         'subject' => 'Achternaam gewijzigd',
+        'activity_date_time' => date('YmdHis'),
+        'is_test' => 0,
         'status_id' => 1,
         'priority_id' => 2,
         'details' => $details,
-        'contact_id' => $c['id'],
+        'source_contact_id' => $c['id'],
+        'target_contact_id' => $c['id'],
       );
-      $a = civicrm_api3('Activity', 'create', $p);
+      CRM_Activity_BAO_Activity::create($p);
     }
   }
   catch (Exception $e) {
