@@ -22,9 +22,7 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
 
   try {
     $p = array(
-      'id' => $params['id'],
-      'first_name' => $params['first_name'],
-      'last_name' => $params['last_name'],
+      'id' => $c['id'],
     );
 
     if (array_key_exists('kunstenpunt_nieuws', $params)) {
@@ -52,8 +50,9 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
         'status_id' => 1,
         'priority_id' => 2,
         'details' => $details,
+        'contact_id' => $c['id'],
       );
-      $c = civicrm_api3('Activity', 'create', $p);
+      $a = civicrm_api3('Activity', 'create', $p);
     }
 
     // check the first name
@@ -68,8 +67,9 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
         'status_id' => 1,
         'priority_id' => 2,
         'details' => $details,
+        'contact_id' => $c['id'],
       );
-      $c = civicrm_api3('Activity', 'create', $p);
+      $a = civicrm_api3('Activity', 'create', $p);
     }
 
     // check the last name
@@ -84,8 +84,9 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
         'status_id' => 1,
         'priority_id' => 2,
         'details' => $details,
+        'contact_id' => $c['id'],
       );
-      $c = civicrm_api3('Activity', 'create', $p);
+      $a = civicrm_api3('Activity', 'create', $p);
     }
   }
   catch (Exception $e) {
