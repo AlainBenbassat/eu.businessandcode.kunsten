@@ -125,10 +125,13 @@ function kunsten_civicrm_managed(&$entities) {
 }
 
 function _kunsten_load_config_items() {
-  $path = realpath(__DIR__);
-  return civicrm_api3('Civiconfig', 'load_json', array(
-    'path' => $path . '/resources/',
-  ));
+  /*
+   * SKIP AS THIS REGENERATES THE ITEMS WITH DEFAULT VALUES!!!
+   */
+  //$path = realpath(__DIR__);
+  //return civicrm_api3('Civiconfig', 'load_json', array(
+  //  'path' => $path . '/resources/',
+  //));
 }
 
 /**
