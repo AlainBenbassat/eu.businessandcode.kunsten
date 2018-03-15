@@ -100,6 +100,27 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
       );
       CRM_Activity_BAO_Activity::create($p);
     }
+
+    // check the e-mail
+    if ($c['email'] != $params['email']) {
+      $details = '<p>oude waarde: ' . $c['email'] .
+        '<br>nieuwe waarde: ' . $params['email'] .
+        '</p>';
+
+      // create an activity
+      $p = array(
+        'activity_type_id' => $config->getChangedDataActivityTypeID(),
+        'subject' => 'E-mail gewijzigd',
+        'activity_date_time' => date('YmdHis'),
+        'is_test' => 0,
+        'status_id' => 1,
+        'priority_id' => 2,
+        'details' => $details,
+        'source_contact_id' => $c['id'],
+        'target_contact_id' => $c['id'],
+      );
+      CRM_Activity_BAO_Activity::create($p);
+    }
   }
   catch (Exception $e) {
     throw new API_Exception('Could not save contact: ' . $e->getMessage(), 999);
