@@ -11,7 +11,18 @@ function kunsten_civicrm_tokens(&$tokens) {
 }
 
 function kunsten_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null) {
-  if (array_key_exists('kunsten', $tokens) && array_key_exists('profilepagelink', $tokens['kunsten'])) {
+  // sometimes $cids is not an array
+  if (!is_array($cids)) {
+    $cids = array($cids);
+  }
+
+  // make sure we have at least 1 contact id
+  // and the token profilepagelink (which is sometimes an array key, sometime an array value)
+  if (count($cids) > 0
+    && array_key_exists('kunsten', $tokens)
+    && in_array('profilepagelink', $tokens['kunsten'])
+    || array_key_exists('profilepagelink', $tokens['kunsten'])
+  ) {
     $config = CRM_Kunsten_Config::singleton();
 
     foreach ($cids as $cid) {
