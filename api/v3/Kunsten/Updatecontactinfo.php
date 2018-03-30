@@ -21,105 +21,87 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
   $config = CRM_Kunsten_Config::singleton();
 
   try {
+    // prepare params to update the contact
     $p = array(
       'id' => $c['id'],
     );
 
+    // mailing preference: kunstenpunt nieuws
     if (array_key_exists('kunstenpunt_nieuws', $params)) {
       $p[$config->getCustomFieldColumn('kunstenpunt_nieuws')] = $params['kunstenpunt_nieuws'];
     }
 
+    // mailing preference: flanders a.i.
     if (array_key_exists('flanders_arts_institute_news', $params)) {
       $p[$config->getCustomFieldColumn('flanders_arts_institute_news')] = $params['flanders_arts_institute_news'];
     }
 
+    // mailing preference: initiatieven
     if (array_key_exists('initiatieven_themas', $params)) {
       $p[$config->getCustomFieldColumn('initiatieven_themas')] = $params['initiatieven_themas'];
-    }
-    civicrm_api3('Contact', 'create', $p);
-
-    // check the current employer
-    if ($c['current_employer'] != $params['current_employer']) {
-      $details = '<p>oude waarde: ' . $c['current_employer'] .
-        '<br>nieuwe waarde: ' . $params['current_employer'] .
-        '</p>';
-
-      // create an activity
-      $p = array(
-        'activity_type_id' => $config->getChangedDataActivityTypeID(),
-        'subject' => 'organisatie gewijzigd',
-        'activity_date_time' => date('YmdHis'),
-        'is_test' => 0,
-        'status_id' => 1,
-        'priority_id' => 2,
-        'details' => $details,
-        'source_contact_id' => $c['id'],
-        'target_contact_id' => $c['id'],
-      );
-      CRM_Activity_BAO_Activity::create($p);
     }
 
     // check the first name
     if ($c['first_name'] != $params['first_name']) {
-      $details = '<p>oude waarde: ' . $c['first_name'] .
-        '<br>nieuwe waarde: ' . $params['first_name'] .
-        '</p>';
-
-      // create an activity
-      $p = array(
-        'activity_type_id' => $config->getChangedDataActivityTypeID(),
-        'subject' => 'voornaam gewijzigd',
-        'activity_date_time' => date('YmdHis'),
-        'is_test' => 0,
-        'status_id' => 1,
-        'priority_id' => 2,
-        'details' => $details,
-        'source_contact_id' => $c['id'],
-        'target_contact_id' => $c['id'],
-      );
-      CRM_Activity_BAO_Activity::create($p);
+      // accept the first name it the original was empty
+      if (empty($c['first_name'])) {
+        $p['first_name'] = $params['first_name'];
+      }
+      else {
+        // original was not empty, don't override but create activity
+        updatecontactinfo_createActivity(
+          $config->getChangedDataActivityTypeID(),
+          $c['id'],
+          'Voornaam gewijzigd',
+          $c['first_name'],
+          $params['first_name']
+        );
+      }
     }
 
     // check the last name
     if ($c['last_name'] != $params['last_name']) {
-      $details = '<p>oude waarde: ' . $c['last_name'] .
-        '<br>nieuwe waarde: ' . $params['last_name'] .
-        '</p>';
+      // accept the last name it the original was empty
+      if (empty($c['last_name'])) {
+        $p['last_name'] = $params['last_name'];
+      }
+      else {
+        // original was not empty, don't override but create activity
+        updatecontactinfo_createActivity(
+          $config->getChangedDataActivityTypeID(),
+          $c['id'],
+          'Achternaam gewijzigd',
+          $c['last_name'],
+          $params['last_name']
+        );
+      }
+    }
 
+    // update the contact
+    civicrm_api3('Contact', 'create', $p);
+
+    // check the current employer
+    if ($c['current_employer'] != $params['current_employer']) {
       // create an activity
-      $p = array(
-        'activity_type_id' => $config->getChangedDataActivityTypeID(),
-        'subject' => 'Achternaam gewijzigd',
-        'activity_date_time' => date('YmdHis'),
-        'is_test' => 0,
-        'status_id' => 1,
-        'priority_id' => 2,
-        'details' => $details,
-        'source_contact_id' => $c['id'],
-        'target_contact_id' => $c['id'],
+      updatecontactinfo_createActivity(
+        $config->getChangedDataActivityTypeID(),
+        $c['id'],
+        'Organisatie gewijzigd',
+        $c['current_employer'],
+        $params['current_employer']
       );
-      CRM_Activity_BAO_Activity::create($p);
     }
 
     // check the e-mail
     if ($c['email'] != $params['email']) {
-      $details = '<p>oude waarde: ' . $c['email'] .
-        '<br>nieuwe waarde: ' . $params['email'] .
-        '</p>';
-
       // create an activity
-      $p = array(
-        'activity_type_id' => $config->getChangedDataActivityTypeID(),
-        'subject' => 'E-mail gewijzigd',
-        'activity_date_time' => date('YmdHis'),
-        'is_test' => 0,
-        'status_id' => 1,
-        'priority_id' => 2,
-        'details' => $details,
-        'source_contact_id' => $c['id'],
-        'target_contact_id' => $c['id'],
+      updatecontactinfo_createActivity(
+        $config->getChangedDataActivityTypeID(),
+        $c['id'],
+        'E-mail gewijzigd',
+        $c['email'],
+        $params['email']
       );
-      CRM_Activity_BAO_Activity::create($p);
     }
   }
   catch (Exception $e) {
@@ -127,4 +109,24 @@ function civicrm_api3_kunsten_Updatecontactinfo($params) {
   }
 
   return civicrm_api3_create_success('OK', $params);
+}
+
+function updatecontactinfo_createActivity($activityID, $contactID, $subject, $oldVal, $newVal) {
+  $details = '<p>oude waarde: ' . $oldVal .
+    '<br>nieuwe waarde: ' . $newVal .
+    '</p>';
+
+  // create an activity
+  $p = array(
+    'activity_type_id' => $activityID,
+    'subject' => $subject,
+    'activity_date_time' => date('YmdHis'),
+    'is_test' => 0,
+    'status_id' => 1,
+    'priority_id' => 2,
+    'details' => $details,
+    'source_contact_id' => $contactID,
+    'target_contact_id' => $contactID,
+  );
+  CRM_Activity_BAO_Activity::create($p);
 }
