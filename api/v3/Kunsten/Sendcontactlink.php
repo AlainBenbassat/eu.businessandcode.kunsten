@@ -7,12 +7,25 @@ function _civicrm_api3_kunsten_Sendcontactlink_spec(&$spec) {
     'title' => 'Email',
     'type' => CRM_Utils_Type::T_EMAIL,
   );
+  $spec['lang'] = array(
+    'api.required' => 0,
+    'title' => 'Language',
+    'type' => CRM_Utils_Type::T_STRING,
+  );
 }
 
 function civicrm_api3_kunsten_Sendcontactlink($params) {
   try {
     if (!array_key_exists('email', $params)) {
       throw new Exception('email is required');
+    }
+
+    // see if we have a language, otherwise it will be Dutch
+    $lang = 'nl';
+    if (array_key_exists('lang', $params)) {
+      if ($params['lang'] == 'en') {
+        $lang = 'en';
+      }
     }
 
     // get the configuration
@@ -38,15 +51,15 @@ function civicrm_api3_kunsten_Sendcontactlink($params) {
       $c = civicrm_api3('Contact', 'create', $p);
 
       // get the welcome message template ID
-      $templateID = $kunstenConfig->getWelcomeMessageTemplateID();
+      $templateID = $kunstenConfig->getWelcomeMessageTemplateID($lang);
     }
     else {
       // get the update message template ID
-      $templateID = $kunstenConfig->getUpdateMessageTemplateID();
+      $templateID = $kunstenConfig->getUpdateMessageTemplateID($lang);
     }
 
     // make sure the template id is filled in
-    if ($templateID == 0) {
+    if (empty($templateID)) {
       throw new Exception('Template id for update and welcome message should be configured');
     }
 

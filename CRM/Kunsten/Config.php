@@ -5,8 +5,8 @@ class CRM_Kunsten_Config {
   private static $singleton;
 
   private $_profilePageLink;
-  private $_welcomeMessageTemplateID;
-  private $_updateMessageTemplateID;
+  private $_welcomeMessageTemplateID = [];
+  private $_updateMessageTemplateID = [];
   private $_fromEmail;
   private $_fromName;
   private $_customFields;
@@ -32,17 +32,41 @@ class CRM_Kunsten_Config {
         'option_group_id' => 'contact_profile',
       ));
 
-      $this->_welcomeMessageTemplateID = civicrm_api3('OptionValue', 'getvalue', array(
+      // the option value contains lang and id pairs, separated by comma
+      // e.g. nl=13,en=54
+      $values = civicrm_api3('OptionValue', 'getvalue', array(
         'return' => 'value',
         'name' => 'welcome_message_template_id',
         'option_group_id' => 'contact_profile',
       ));
+      $valuesArray = explode(',', $values);
+      foreach ($valuesArray as $v) {
+        $langAndID = explode('=', $v);
+        if ($langAndID[0] == 'nl') {
+          $this->_welcomeMessageTemplateID['nl'] = $langAndID[1];
+        }
+        else if ($langAndID[0] == 'en') {
+          $this->_welcomeMessageTemplateID['en'] = $langAndID[1];
+        }
+      }
 
-      $this->_updateMessageTemplateID = civicrm_api3('OptionValue', 'getvalue', array(
+      // the option value contains lang and id pairs, separated by comma
+      // e.g. nl=13,en=54
+      $values = civicrm_api3('OptionValue', 'getvalue', array(
         'return' => 'value',
         'name' => 'update_message_template_id',
         'option_group_id' => 'contact_profile',
       ));
+      $valuesArray = explode(',', $values);
+      foreach ($valuesArray as $v) {
+        $langAndID = explode('=', $v);
+        if ($langAndID[0] == 'nl') {
+          $this->_updateMessageTemplateID['nl'] = $langAndID[1];
+        }
+        else if ($langAndID[0] == 'en') {
+          $this->_updateMessageTemplateID['en'] = $langAndID[1];
+        }
+      }
 
       $this->_changedDataActivityTypeID = civicrm_api3('OptionValue', 'getvalue', array(
         'return' => 'value',
@@ -61,7 +85,7 @@ class CRM_Kunsten_Config {
       }
     }
     catch (Exception $e) {
-      throw new Exception('Could not retrieve the option value: profile page link');
+      throw new Exception('Could not retrieve the option value: ' . $e->getMessage());
     }
   }
 
@@ -76,12 +100,12 @@ class CRM_Kunsten_Config {
     return $this->_profilePageLink;
   }
 
-  public function getWelcomeMessageTemplateID() {
-    return $this->_welcomeMessageTemplateID;
+  public function getWelcomeMessageTemplateID($lang) {
+    return $this->_welcomeMessageTemplateID[$lang];
   }
 
-  public function getUpdateMessageTemplateID() {
-    return $this->_updateMessageTemplateID;
+  public function getUpdateMessageTemplateID($lang) {
+    return $this->_updateMessageTemplateID[$lang];
   }
 
   public function getFromEmail() {
