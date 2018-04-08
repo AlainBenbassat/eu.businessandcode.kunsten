@@ -1,10 +1,16 @@
 <?php
 
+// optout url:
+// https://crm.kunsten.be/civicrm/?page=CiviCRM&q=civicrm/optout&a=SOMETHING&b=ANOTHER-THING&lang=nl
+
 use CRM_Kunsten_ExtensionUtil as E;
 
 class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
 
   public function buildQuickForm() {
+    // add css to hide some stuff
+    CRM_Core_Resources::singleton()->addStyle('#sidebar, #printer-friendly, div.breadcrumb { display: none; } ');
+
     // check if we're in a submit
     $optoutstatus = CRM_Utils_Array::value('optoutstatus', $_POST, 0);
     if ($optoutstatus !== 0) {
