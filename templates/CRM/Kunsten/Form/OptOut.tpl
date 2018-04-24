@@ -6,5 +6,5 @@
 </div>
 
 <p>
-    <img width="200px" src="$logo">
+    <img width="200px" src="{$logo}">
 </p>
