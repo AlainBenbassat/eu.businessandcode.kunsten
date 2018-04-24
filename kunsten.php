@@ -7,6 +7,7 @@ use CRM_Kunsten_ExtensionUtil as E;
 function kunsten_civicrm_tokens(&$tokens) {
   $tokens['kunsten'] = array(
     'kunsten.profilepagelink' => 'Link naar de pagina waar het contact zijn gegevens kan aanpassen.',
+    'kunsten.profilepagelink_en' => 'Link to Flanders Arts Institute page where a contact can change its data.',
   );
 }
 
@@ -18,33 +19,41 @@ function kunsten_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = arr
 
   // make sure we have at least 1 contact id
   // and the token profilepagelink (which is sometimes an array key, sometime an array value)
-  if (count($cids) > 0
-    && array_key_exists('kunsten', $tokens)
-    && in_array('profilepagelink', $tokens['kunsten'])
-    || array_key_exists('profilepagelink', $tokens['kunsten'])
-  ) {
-    $config = CRM_Kunsten_Config::singleton();
-
+  if (array_key_exists('kunsten', $tokens)) {
     foreach ($cids as $cid) {
-      $sql = "
-        SELECT
-          id
-          , hash
-        FROM
-          civicrm_contact c
-        WHERE
-          c.id = %1
-      ";
-      $sqlParams = array(
-        1 => array($cid, 'Integer'),
-      );
-      $dao = CRM_Core_DAO::executeQuery($sql, $sqlParams);
-      $dao->fetch();
-
-      $url = $config->getProfilePageLink() . "?a={$dao->id}&b={$dao->hash}";
-      $values[$cid]['kunsten.profilepagelink'] = $url;
+      if (in_array('profilepagelink', $tokens['kunsten']) || array_key_exists('profilepagelink', $tokens['kunsten'])) {
+        $url = kunsten_civicrm_getProfilePagaLink($cid, 'nl');
+        $values[$cid]['kunsten.profilepagelink'] = $url;
+      }
+      else if (in_array('profilepagelink_en', $tokens['kunsten']) || array_key_exists('profilepagelink_en', $tokens['kunsten'])) {
+        $url = kunsten_civicrm_getProfilePagaLink($cid, 'en');
+        $values[$cid]['kunsten.profilepagelink_en'] = $url;
+      }
     }
   }
+}
+
+function kunsten_civicrm_getProfilePagaLink($cid, $lang) {
+  $config = CRM_Kunsten_Config::singleton();
+
+  $sql = "
+    SELECT
+      id
+      , hash
+    FROM
+      civicrm_contact c
+    WHERE
+      c.id = %1
+  ";
+  $sqlParams = array(
+    1 => array($cid, 'Integer'),
+  );
+  $dao = CRM_Core_DAO::executeQuery($sql, $sqlParams);
+  $dao->fetch();
+
+  $url = $config->getProfilePageLink($lang) . "?a={$dao->id}&b={$dao->hash}";
+
+  return $url;
 }
 
 

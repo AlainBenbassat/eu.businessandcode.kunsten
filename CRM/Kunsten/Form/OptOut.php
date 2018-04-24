@@ -9,7 +9,7 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
 
   public function buildQuickForm() {
     // add css to hide some stuff
-    CRM_Core_Resources::singleton()->addStyle('#sidebar, #printer-friendly, div.breadcrumb { display: none; } ');
+    CRM_Core_Resources::singleton()->addStyle('#sidebar, #printer-friendly, div.breadcrumb, div.site-info { display: none; } ');
 
     // check if we're in a submit
     $optoutstatus = CRM_Utils_Array::value('optoutstatus', $_POST, 0);

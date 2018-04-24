@@ -5,6 +5,7 @@ class CRM_Kunsten_Config {
   private static $singleton;
 
   private $_profilePageLink;
+  private $_profilePageLinkEN;
   private $_welcomeMessageTemplateID = [];
   private $_updateMessageTemplateID = [];
   private $_fromEmail;
@@ -17,6 +18,12 @@ class CRM_Kunsten_Config {
       $this->_profilePageLink = civicrm_api3('OptionValue', 'getvalue', array(
         'return' => 'value',
         'name' => 'profile_page_link',
+        'option_group_id' => 'contact_profile',
+      ));
+
+      $this->_profilePageLinkEN = civicrm_api3('OptionValue', 'getvalue', array(
+        'return' => 'value',
+        'name' => 'profile page link en',
         'option_group_id' => 'contact_profile',
       ));
 
@@ -96,8 +103,13 @@ class CRM_Kunsten_Config {
     return self::$singleton;
   }
 
-  public function getProfilePageLink() {
-    return $this->_profilePageLink;
+  public function getProfilePageLink($lang) {
+    if ($lang == 'en') {
+      return $this->_profilePageLinkEN;
+    }
+    else {
+      return $this->_profilePageLink;
+    }
   }
 
   public function getWelcomeMessageTemplateID($lang) {
