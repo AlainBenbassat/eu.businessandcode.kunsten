@@ -60,7 +60,7 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
       else {
         $introText = '<p>Klik op ‘Bevestigen’ en je ontvangt geen enkele mail meer op<br><strong>'
           . $contact['email']
-          . '</strong>, tenzij je je opnieuw inschrijft via <a href="https://www.kunsten.be/">kunsten.be</a>.</p>';
+          . '</strong>, tenzij je je opnieuw inschrijft<br>via <a href="https://www.kunsten.be/">kunsten.be</a>.</p>';
       }
     }
     else {
