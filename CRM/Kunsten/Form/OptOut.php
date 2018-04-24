@@ -14,8 +14,14 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
     // check if we're in a submit
     $optoutstatus = CRM_Utils_Array::value('optoutstatus', $_POST, 0);
     if ($optoutstatus !== 0) {
-      // show the message and quit
-      CRM_Core_Session::setStatus($optoutstatus);
+      // redirect to website
+      if ($optoutstatus == 'en') {
+        $url = 'https://www.flandersartsinstitute.be';
+      }
+      else {
+        $url = 'https://www.kunsten.be';
+      }
+      CRM_Utils_System::redirect($url);
       return;
     }
 
@@ -52,7 +58,7 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
       $logo = 'https://www.kunsten.be/wp-content/themes/kunstenpunt/assets/feec82ad707125cbda9bcdf8c094efe9b740ec92/images/kunstenpunt/logo.svg';
       $title = 'Uitschrijven van alle toekomstige mails van Kunstenpunt?';
       $submitText = 'Bevestigen';
-      $optOutMessage = 'U bent uitgeschreven.';
+      $optOutMessage = 'nl';
 
       if ($errorMessage) {
         $introText = $errorMessage;
@@ -67,7 +73,7 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
       $logo = 'https://www.flandersartsinstitute.be/wp-content/themes/kunstenpunt/assets/feec82ad707125cbda9bcdf8c094efe9b740ec92/images/flandersartsinstitute/logo.svg';
       $title = 'Unsubscribe from all future mails of Flanders Arts Institute?';
       $submitText = 'Confirm';
-      $optOutMessage = 'Succesfully opted out.';
+      $optOutMessage = 'en';
 
       if ($errorMessage) {
         $introText = $errorMessage;
