@@ -49,6 +49,7 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
 
     // set the different texts
     if ($language == 'nl') {
+      $logo = 'https://www.kunsten.be/wp-content/themes/kunstenpunt/assets/feec82ad707125cbda9bcdf8c094efe9b740ec92/images/kunstenpunt/logo.svg';
       $title = 'Opt-out Kunstenpunt';
       $submitText = 'Bevestigen';
       $optOutMessage = 'U bent uitgeschreven.';
@@ -58,11 +59,13 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
         $email = '';
       }
       else {
-        $introText = '<p>Bevestig uw uitschrijving voor alle communicatie van Kunstenpunt (opt-out).</p>';
+        $introText = '<p>Uitschrijven van alle toekomstige mails van Kunstenpunt?.</p>'
+          . '<p>Klik op ‘Bevestigen’. Je ontvangt geen enkele mail meer van ons, tenzij je je opnieuw inschrijft via <a href="https://www.kunsten.be/">kunsten.be</a></p>';
         $email = '<p>E-mail:' . $contact['email'] . '</p>';
       }
     }
     else {
+      $logo = 'https://www.flandersartsinstitute.be/wp-content/themes/kunstenpunt/assets/feec82ad707125cbda9bcdf8c094efe9b740ec92/images/flandersartsinstitute/logo.svg';
       $title = 'Opt Out Flanders Arts Institute';
       $submitText = 'Confirm';
       $optOutMessage = 'Succesfully opted out.';
@@ -72,7 +75,8 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
         $email = '';
       }
       else {
-        $introText = '<p>Confirm to opt out from all Flanders Arts Institute communication.</p>';
+        $introText = '<p>Unsubscribe from all future mails of Flanders Arts Institute?</p>'
+          . '<p>Click ‘Confirm’. You’ll stop receiving mails from us, unless you re-subscribe via <a href="https://www.flandersartsinstitute.be">flandersartsinstitute.be</a></p>';
         $email = '<p>Email:' . $contact['email'] . '</p>';
       }
     }
@@ -80,9 +84,10 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
     // set the title
     CRM_Utils_System::setTitle($title);
 
-    // set the texts
+    // set the texts and logo
     $this->assign('introText', $introText);
     $this->assign('email', $email);
+    $this->assign('logo', $logo);
 
     // submit button (only if no errors)
     if (!$errorMessage) {
