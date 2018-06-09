@@ -11,20 +11,6 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
     // add css to hide some stuff
     CRM_Core_Resources::singleton()->addStyle('#sidebar, #printer-friendly, div.breadcrumb, div.site-info { display: none; } body { background-color: #ffffff; } ');
 
-    // check if we're in a submit
-    $optoutstatus = CRM_Utils_Array::value('optoutstatus', $_POST, 0);
-    if ($optoutstatus !== 0) {
-      // redirect to website
-      if ($optoutstatus == 'en') {
-        $url = 'https://www.flandersartsinstitute.be';
-      }
-      else {
-        $url = 'https://www.kunsten.be';
-      }
-      CRM_Utils_System::redirect($url);
-      return;
-    }
-
     // get query parameters
     $contactID = CRM_Utils_Array::value('a', $_GET, 0);
     $hash = CRM_Utils_Array::value('b', $_GET, 0);
@@ -58,7 +44,6 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
       $logo = 'https://www.kunsten.be/wp-content/themes/kunstenpunt/assets/feec82ad707125cbda9bcdf8c094efe9b740ec92/images/kunstenpunt/logo.svg';
       $title = 'Uitschrijven van alle toekomstige mails van Kunstenpunt?';
       $submitText = 'Bevestigen';
-      $optOutMessage = 'nl';
 
       if ($errorMessage) {
         $introText = $errorMessage;
@@ -73,7 +58,6 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
       $logo = 'https://www.flandersartsinstitute.be/wp-content/themes/kunstenpunt/assets/feec82ad707125cbda9bcdf8c094efe9b740ec92/images/flandersartsinstitute/logo.svg';
       $title = 'Unsubscribe from all future mails of Flanders Arts Institute?';
       $submitText = 'Confirm';
-      $optOutMessage = 'en';
 
       if ($errorMessage) {
         $introText = $errorMessage;
@@ -102,7 +86,7 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
         ],
       ]);
       $this->addElement('hidden', 'id', $contactID);
-      $this->addElement('hidden', 'optoutstatus', $optOutMessage);
+      $this->addElement('hidden', 'lang', $language);
     }
 
     parent::buildQuickForm();
@@ -111,7 +95,7 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
   public function postProcess() {
     // get the contact id
     $contactID = CRM_Utils_Array::value('id', $_POST, 0);
-    $optOutMessage = CRM_Utils_Array::value('optoutmessage', $_POST, 0);
+    $language = CRM_Utils_Array::value('lang', $_POST, 'nl');
 
     // opt out the contact
     if ($contactID > 0) {
@@ -137,7 +121,14 @@ class CRM_Kunsten_Form_OptOut extends CRM_Core_Form {
     );
     CRM_Activity_BAO_Activity::create($p);
 
-    $this->addElement('hidden', 'optoutstatus', $optOutMessage);
+    // redirect to website
+    if ($language == 'en') {
+      $url = 'https://www.flandersartsinstitute.be';
+    }
+    else {
+      $url = 'https://www.kunsten.be';
+    }
+    CRM_Utils_System::redirect($url);
 
     parent::postProcess();
   }
