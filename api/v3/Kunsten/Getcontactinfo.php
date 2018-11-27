@@ -17,11 +17,11 @@ function _civicrm_api3_kunsten_Getcontactinfo_spec(&$spec) {
 
 function civicrm_api3_kunsten_Getcontactinfo($params) {
   try {
-    if (!array_key_exists('id', $params)) {
+    if (!array_key_exists('id', $params) || $params['id'] == '') {
       throw new Exception('id is required');
     }
 
-    if (!array_key_exists('hash', $params)) {
+    if (!array_key_exists('hash', $params) || $params['hash'] == '') {
       throw new Exception('hash is required');
     }
 
